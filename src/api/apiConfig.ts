@@ -7,5 +7,7 @@ export const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    "x-apisports-key": "37635e32f8f35d558f61757aeee17b66",
+    "x-rapidapi-host": "v3.football.api-sports.io"
   },
 });
