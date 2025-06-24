@@ -8,4 +8,8 @@ export * from "./countryView.entity";
 export * from "./transfer.entity"
 export * from "./leagueMatch.entity"
 export * from "./match.entity"
+export * from "./detailLeague.entity"
+export * from "./teamTable.entity"
+export * from "./infoLeague.entity"
+export * from "./tableData.entity"
 

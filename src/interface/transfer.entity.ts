@@ -13,7 +13,7 @@ export interface ITransfer{
     fee:{
         feeText:string,
         localizedFeedText:string,
-        value:number
+        value: number | null
     },
     transferType:{
         text:string,

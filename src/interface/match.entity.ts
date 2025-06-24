@@ -1,29 +1,41 @@
-export interface IMatch{
+export interface IMatch {
     id: number;
-    leagueId: number;
-    time: string;
+    leagueId: number | null;
+    time: string | null;
+    round: string | null,
+    pageUrl: string | null,
     home: {
         id: number;
-        score: number;
+        score: number | null;
         name: string;
-        longName: string;
+        longName: string | null;
+        shortName: string | null
     };
     away: {
         id: number;
-        score: number;
+        score: number | null;
         name: string;
-        longName: string;
+        longName: string | null;
+        shortName: string | null
     };
     eliminatedTeamId: number | null;
-    statusId: number;
-    tournamentStage: string;
+    statusId: number | null;
+    tournamentStage: string | null;
     status: {
         utcTime: string;
-        halfs: object;
-        periodLength: number;
+        halfs: object | null;
+        periodLength: number | null;
         started: boolean;
         cancelled: boolean;
         finished: boolean;
+        liveTime: {
+            short: string | null,
+            shortKey: string | null,
+            long: string | null,
+            longKey: string | null,
+            maxTime: number | null,
+            addedTime: number | null
+        } | null
     };
-    timeTS: number;
+    timeTS: number | null;
 }
