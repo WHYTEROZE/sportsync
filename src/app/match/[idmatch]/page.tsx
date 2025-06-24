@@ -3,83 +3,82 @@
 import { SiteHeader } from '@/components/site-header';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { getLeagueById } from '@/api/leagues.api';
-import { IInfoLeague } from '@/interface';
+import { getMatchDetail } from '@/api/matches.api';
+import { IMatchDetail } from '@/interface';
+import { useMatchClock } from '@/hooks/useMatchClock';
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table"
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
 } from "@/components/ui/carousel"
 
 export default function Page() {
-  const params = useParams();
-  const [loading, setLoading] = useState(true);
-  const [league, setLeague] = useState<IInfoLeague | null>(null);
+    const params = useParams();
 
-  // Aquí protegemos contra valores nulos
-  const idleague = typeof params?.idleague === 'string' ? params.idleague : '';
-  const nameleague = typeof params?.nameleague === 'string' ? params.nameleague : '';
 
-  const handleGetLeague = async (id: number) => {
-    try {
-      const { data } = await getLeagueById(id);
-      if (data) {
-        setLeague(data);
+    // Aquí protegemos contra valores nulos
+    const idmatch = typeof params?.idmatch === 'string' ? params.idmatch : '';
 
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+    const [matchDetail, setMatchDetail] = useState<IMatchDetail | null>(null);
 
-  useEffect(() => {
-    if (idleague && nameleague) {
-      const fetchData = async () => {
-        setLoading(true);
+    const handleGetMatchDetail = async (id: string) => {
         try {
-          handleGetLeague(Number(idleague));
-        } catch (err) {
-          console.error('Error al consultar la API:', err);
-        } finally {
-          setLoading(false);
+            const { data } = await getMatchDetail(id);
+            if (data) {
+                setMatchDetail(data);
+            }
+        } catch (error) {
+            console.log(error);
         }
-      };
-
-      fetchData();
     }
-  }, [idleague, nameleague]);
-  useEffect(() => {
-    if (league) {
-      //console.log("League data has been updated:", league.table[0].data);
-      // Aquí puedes agregar cualquier lógica adicional que necesites cuando los datos de la liga cambien
-    }
-  }, [league]);
 
-  if (!idleague || !nameleague) return <p>Cargando parámetros...</p>;
-  if (loading) return <p>Consultando API...</p>;
+    useEffect(() => {
+        if (idmatch) {
+            const [idM, idLeague] = idmatch.split("-");
+            handleGetMatchDetail(idM)
+        }
+    }, [idmatch]);
 
-  return (
-    <>
-      <SiteHeader title={league?.details.name ?? 'cargando ...'} />
-      <div className="flex flex-1 flex-col">
-        <div className="@container/main flex flex-1 flex-col gap-2">
-          <div className="flex flex-col  p-4">
-            match
-     
-          </div>
-        </div>
-      </div>
-    </>
-  );
+    const { clock, phase } = useMatchClock(matchDetail?.header.status.halfs ?? {
+        firstHalfStarted: "",
+        firstHalfEnded: "",
+        secondHalfStarted: "",
+        secondHalfEnded: "",
+        firstExtraHalfStarted: "",
+        secondExtraHalfStarted: "",
+        gameEnded: ""
+    });
+
+
+    return (
+        <>
+            <SiteHeader title={`${matchDetail?.header.teams[0].name ?? 'Cargando'} vs ${matchDetail?.header.teams[1].name ?? 'Cargando'}`} />
+
+            <div className="flex flex-1 flex-col">
+                <div className="@container/main flex flex-1 flex-col gap-2">
+                    <div className="p-4">
+
+                        <p className='flex items-center justify-center gap-4 text-base'>
+                            <span className="text-green-600 font-semibold">{phase}</span>
+                            <img src={matchDetail?.header.teams[0]?.imageUrl} width="42" alt="Team logo" />
+                            <span>{matchDetail?.header.teams[0]?.name} <b>{matchDetail?.header.teams[0]?.score}</b> </span> <b>  </b>
+                            <img src={matchDetail?.header.teams[1]?.imageUrl} width="42" alt="Team logo" />
+                            <span>{matchDetail?.header.teams[1]?.name} <b>{matchDetail?.header.teams[1]?.score}</b> </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }

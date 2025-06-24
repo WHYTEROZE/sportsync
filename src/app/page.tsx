@@ -122,7 +122,7 @@ export default function Page() {
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="px-8">
                 <h1 className="font-bold text-lg">Fichajes</h1>
@@ -269,28 +269,31 @@ export default function Page() {
                               {
 
                                 match.matches.map((single, index2) => (
-                                  <li
-                                    key={index2}
-                                    className="mt-2 w-full border-2 border-dashed p-2"
+                                  <Link href={`/match/${single.id}-${single.leagueId}`}>
+                                    <li
+                                      key={index2}
+                                      className="mt-2 w-full border-2 border-dashed p-2"
 
-                                  ><h1 className="text-green-500">
-                                    {
-                                      
-                                      single.status.liveTime!=null ? 'EN VIVO' : null
-                                    }</h1>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                      <img
-                                        src={`https://images.fotmob.com/image_resources/logo/teamlogo/${single.home.id}.png`}
-                                        style={{ width: '20px', height: '20px', marginRight: '8px' }}
-                                      />
-                                      {single.home.name} {single.home.score != null ? single.home.score : null}  <b className="mx-2">VS</b> {single.home.score != null ? single.away.score : null} <img
-                                        src={`https://images.fotmob.com/image_resources/logo/teamlogo/${single.away.id}.png`}
-                                        style={{ width: '20px', height: '20px', marginRight: '8px' }}
-                                      />
-                                      {single.away.name}
-                                    </div>
+                                    ><h1 className="text-green-500">
+                                        {
 
-                                  </li>
+                                          single.status.liveTime != null ? 'EN VIVO' : null
+                                        }</h1>
+                                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <img
+                                          src={`https://images.fotmob.com/image_resources/logo/teamlogo/${single.home.id}.png`}
+                                          style={{ width: '20px', height: '20px', marginRight: '8px' }}
+                                        />
+                                        {single.home.name} {single.home.score != null ? single.home.score : null}  <b className="mx-2">VS</b> {single.home.score != null ? single.away.score : null} <img
+                                          src={`https://images.fotmob.com/image_resources/logo/teamlogo/${single.away.id}.png`}
+                                          style={{ width: '20px', height: '20px', marginRight: '8px' }}
+                                        />
+                                        {single.away.name}
+                                      </div>
+
+                                    </li>
+                                  </Link>
+
                                 ))}
                             </ul>
                           </AccordionContent>

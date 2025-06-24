@@ -12,4 +12,5 @@ export * from "./detailLeague.entity"
 export * from "./teamTable.entity"
 export * from "./infoLeague.entity"
 export * from "./tableData.entity"
-
+export * from "./team.entity"
+export * from "./matchDetail.entity"

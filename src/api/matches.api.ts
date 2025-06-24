@@ -9,3 +9,7 @@ export const getMatches = async () => {
 
   return apiClientFotMob.get(url);
 };
+export const getMatchDetail = async (id:string) => {
+  const url = `/matchDetails?matchId=`+id;
+  return apiClientFotMob.get(url);
+};
