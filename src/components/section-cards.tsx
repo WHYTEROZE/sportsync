@@ -15,11 +15,10 @@ import { ICountry } from "@/interface";
 type Props = {
   countries: ICountry[];
   fixtures: number;
-  leagues: number;
   fixturesByDate: number;
 };
 
-export function SectionCards({ countries, fixtures, leagues, fixturesByDate }: Props ) {
+export function SectionCards({ countries, fixtures, fixturesByDate }: Props ) {
 
 
   return (
@@ -72,7 +71,7 @@ export function SectionCards({ countries, fixtures, leagues, fixturesByDate }: P
         <CardHeader>
           <CardDescription>Total de Ligas</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {leagues}
+            0
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
