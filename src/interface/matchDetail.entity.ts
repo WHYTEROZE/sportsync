@@ -1,4 +1,4 @@
-import { ITeam } from "./team.entity";
+import { ITeam, IEvents } from "./index";
 export interface IMatchDetail{
     header:{
         teams: ITeam[];
@@ -29,6 +29,7 @@ export interface IMatchDetail{
               penalties: null | any;
               addedTime: number;
             };
-          }
+          };
+        events:IEvents
     }
 }

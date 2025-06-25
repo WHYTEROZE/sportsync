@@ -42,7 +42,6 @@ export function useMatchClock(halfs: Halfs) {
         const elapsed = Math.floor((now - start) / 1000);
         return elapsed >= 0 ? elapsed + offsetMin * 60 : 0;
       };
-      console.log(halfs);
       const firstStart = parseDate(halfs.firstHalfStarted);
       const firstEnd = parseDate(halfs.firstHalfEnded);
       const secondStart = parseDate(halfs.secondHalfStarted);

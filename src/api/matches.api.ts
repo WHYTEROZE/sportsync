@@ -1,9 +1,10 @@
 import { apiClientFotMob } from "./apiConfig2";
 
 export const getMatches = async () => {
-  // Generar la fecha actual en formato YYYYMMDD
   const today = new Date();
-  const date = today.toISOString().slice(0, 10).replace(/-/g, ''); // Ej: "20250624"
+
+  // Obtener la fecha local en formato YYYYMMDD
+  const date = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
 
   const url = `/matches?date=${date}&timezone=America%2FLima&ccode3=PER`;
 
