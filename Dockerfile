@@ -14,7 +14,9 @@ RUN npm install
 
 # Copia el resto del proyecto
 COPY . .
-
+RUN echo "NEXT_PUBLIC_API_URL=https://v3.football.api-sports.io" >> .env.local && \
+    echo "NEXT_PUBLIC_API_URLFotMob2=https://www.fotmob.com/api" >> .env.local && \
+    echo "NEXT_PUBLIC_API_URLFotMob=http://localhost:3000/api" >> .env.local
 # Construye el proyecto de Next.js
 RUN npm run build
 # Si usas Yarn: RUN yarn build
