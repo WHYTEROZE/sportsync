@@ -122,7 +122,7 @@ export default function Page() {
                                 Object.keys(matchDetail.header.events.awayTeamGoals).length > 0 ? (
                                 Object.entries(matchDetail.header.events.awayTeamGoals).map(([lastName, goals]) =>
                                     goals.map((goal, idx) => (
-                                        <div key={`${lastName}-${idx}`}>
+                                        <div key={`${lastName}-${idx}-${goal.time}`}>
                                             <p>⚽ Gol de {goal.player.name} al minuto {goal.time}' - <b>{matchDetail?.header.teams[1].name}</b></p>
                                         </div>
                                     ))

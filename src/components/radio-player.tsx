@@ -15,7 +15,7 @@ export const RadioPlayer = ({ src }: Props) => {
       hls.loadSource(src);
       hls.attachMedia(audioRef.current);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        audioRef.current?.play();
+      
       });
 
       return () => {
@@ -24,7 +24,7 @@ export const RadioPlayer = ({ src }: Props) => {
     } else if (audioRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
       // Safari nativo
       audioRef.current.src = src;
-      audioRef.current.play();
+
     }
   }, [src]);
 

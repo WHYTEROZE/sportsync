@@ -107,10 +107,10 @@ export default function Page() {
   }
 
   useEffect(() => {
-    handleGetCountries();
-    handleGetFixtures();
+    //handleGetCountries();
+    //handleGetFixtures();
     handleGetLeagues();
-    handleGetFixturesByDate();
+    //handleGetFixturesByDate();
     handleGetTransfers();
     handleGetMatches();
   }, []);
@@ -133,7 +133,7 @@ export default function Page() {
                       {
                         transfers.map((transfer, index) => (
 
-                          <CarouselItem key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                          <CarouselItem key={`${transfer.playerId}-${transfer.playerId}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div>
                               <img
                                 src={`https://images.fotmob.com/image_resources/playerimages/${transfer.playerId}.png`}
@@ -173,8 +173,8 @@ export default function Page() {
                 <h1 className="font-bold text-lg">Ligas Populares</h1>
                 <ul>
                   {popularLeagues.map((league, index) => (
-                    <Link href={league.pageUrl}>
-                      <li className="mt-2" key={index} style={{ display: 'flex', alignItems: 'center' }}><img src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${league.id}.png`} alt={`${league.name} logo`} style={{ width: '20px', height: '20px', marginRight: '8px' }} /> {league.name}</li>
+                    <Link key={`${league.id}-${league.pageUrl}`} href={league.pageUrl}>
+                      <li className="mt-2" style={{ display: 'flex', alignItems: 'center' }}><img src={`https://images.fotmob.com/image_resources/logo/leaguelogo/${league.id}.png`} alt={`${league.name} logo`} style={{ width: '20px', height: '20px', marginRight: '8px' }} /> {league.name}</li>
                     </Link>
 
                   ))}
@@ -189,9 +189,9 @@ export default function Page() {
                     <AccordionContent>
                       <ul>
                         {internationalLeagues?.leagues?.map((league, index) => (
-                          <Link href={league.pageUrl}>
+                          <Link  key={`${index}-${league.id}`} href={league.pageUrl}>
                             <li
-                              key={index}
+                             
                               className="mt-2"
                               style={{ display: 'flex', alignItems: 'center' }}
                             >
@@ -213,7 +213,7 @@ export default function Page() {
 
                 {
                   countriesLeagues.map((country, index) => (
-                    <div key={index}>
+                    <div key={`${index}-${country.ccode}`}>
 
                       <Accordion type="single" collapsible>
                         <AccordionItem value="item-1">
@@ -221,9 +221,9 @@ export default function Page() {
                           <AccordionContent>
                             <ul>
                               {country.leagues?.map((league, index) => (
-                                <Link href={league.pageUrl}>
+                                <Link key={`${index}-${league.id}`} href={league.pageUrl}>
                                   <li
-                                    key={index}
+                                    
                                     className="mt-2"
                                     style={{ display: 'flex', alignItems: 'center' }}
                                   >
@@ -245,17 +245,13 @@ export default function Page() {
                   ))
                 }
 
-
-
-
-
               </div>
 
               <div className="">
                 <h1 className="font-bold text-lg">Encuentros de Hoy</h1>
                 {
                   matches.map((match, index) => (
-                    <div key={index}>
+                    <div key={`${index}-${match.ccode}-${match.id}`}>
 
                       <Accordion type="single" collapsible>
                         <AccordionItem value="item-1">
@@ -269,9 +265,9 @@ export default function Page() {
                               {
 
                                 match.matches.map((single, index2) => (
-                                  <Link href={`/match/${single.id}-${single.leagueId}`}>
+                                  <Link key={`${single.id}-${single.leagueId}`} href={`/match/${single.id}-${single.leagueId}`}>
                                     <li
-                                      key={index2}
+                                      
                                       className="mt-2 w-full border-2 border-dashed p-2"
 
                                     ><h1 className="text-green-500">
