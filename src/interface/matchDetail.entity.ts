@@ -1,4 +1,4 @@
-import { ITeam, IEvents } from "./index";
+import { ITeam, IEvents, IEvent } from "./index";
 export interface IMatchDetail{
     header:{
         teams: ITeam[];
@@ -30,6 +30,29 @@ export interface IMatchDetail{
               addedTime: number;
             };
           };
-        events:IEvents
+        events:IEvents;
+    },
+    content:{
+      matchFacts:{
+        events:{
+          events:IEvent[] | null;
+        };
+        infoBox:{
+          Tournament:{
+            id:number;
+            leagueName:string;
+            link:string;
+            round:string;
+          }
+        }
+      };
+      table:{
+        leagueId:string;
+        url:string;
+        tournamentNameForUrl:string;
+      };
+      h2h:{
+
+      }
     }
 }

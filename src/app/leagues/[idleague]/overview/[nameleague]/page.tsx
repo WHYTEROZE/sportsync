@@ -147,7 +147,7 @@ export default function Page() {
                         )
                         .map((transfer) => (
                           <CarouselItem
-                            key={transfer.playerId}
+                            key={`${transfer.playerId}-${transfer.toClubId}-${transfer.fromClubId}`}
                             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                           >
                             <div>

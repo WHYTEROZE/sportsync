@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { getMatchDetail } from '@/api/matches.api';
 import { getAudio } from '@/api/audio.api';
-import { IMatchDetail,IAudio } from '@/interface';
+import { IMatchDetail, IAudio } from '@/interface';
 import { useMatchClock } from '@/hooks/useMatchClock';
 import { RadioPlayer } from '@/components/radio-player';
 import {
@@ -37,7 +37,7 @@ export default function Page() {
         try {
             const { data } = await getMatchDetail(id);
             if (data) {
-    
+
                 setMatchDetail(data);
             }
         } catch (error) {
@@ -48,7 +48,7 @@ export default function Page() {
         try {
             const { data } = await getAudio(id);
             if (data) {
-                console.log("audio",data);
+                console.log("audio", data);
                 setDataAudio(data);
             }
         } catch (error) {
@@ -65,7 +65,7 @@ export default function Page() {
     }, [idmatch]);
     useEffect(() => {
         if (matchDetail) {
-            console.log("matchdetail", matchDetail);
+            console.log("matchdetail", matchDetail.content.matchFacts);
         }
     }, [matchDetail]);
 
@@ -95,47 +95,92 @@ export default function Page() {
                             <img src={matchDetail?.header.teams[1]?.imageUrl} width="42" alt="Team logo" />
                             <span>{matchDetail?.header.teams[1]?.name} <b>{matchDetail?.header.teams[1]?.score}</b> </span>
                         </p>
+                        <p><b>Liga:</b> {matchDetail?.content.matchFacts.infoBox.Tournament.leagueName}</p>
+                        <p><b>Ronda:</b> {matchDetail?.content.matchFacts.infoBox.Tournament.round}</p>
+                        <p><a href={matchDetail?.content.matchFacts.infoBox.Tournament.link} target='_blank'><b>Ver tabla de posiciones</b> </a></p>
                     </div>
                     <div className='p-4'>
-                {
-                    dataAudio?.urls && dataAudio.urls.length>0 ? (
-                       <><b>En Vivo</b> <RadioPlayer src={dataAudio.urls[0]._}/>  </>
-                    ) : null
-                }
-                        <ul>
-                            <h1>Eventos</h1>
+                        {
+                            dataAudio?.urls && dataAudio.urls.length > 0 ? (
+                                <><b>En Vivo</b> <RadioPlayer src={dataAudio.urls[0]._} />  </>
+                            ) : null
+                        }
 
-                            {matchDetail?.header.events?.homeTeamGoals &&
-                                Object.keys(matchDetail.header.events.homeTeamGoals).length > 0 ? (
-                                Object.entries(matchDetail.header.events.homeTeamGoals).map(([lastName, goals]) =>
-                                    goals.map((goal, idx) => (
-                                        <div key={`${lastName}-${idx}`}>
-                                            <p>⚽ Gol de {goal.player.name} al minuto {goal.time}' - <b>{matchDetail?.header.teams[0].name}</b></p>
+                        <h1>Eventos</h1>
+                        {matchDetail?.content.matchFacts.events.events?.map((event, idx) => {
+                            // Si el tipo es "Half", renderizarlo diferente y evitar los demás
+                            if (event.type === 'Half') {
+                                return (
+                                    <div key={`${event.reactKey}-${idx}`} className="col-span-full text-center font-semibold text-gray-600 mt-4">
+                                        ⏸️ Pitaso para finalizar el partido - Minuto {event.time}
+                                    </div>
+                                );
+                            }
+
+                            // Resto de eventos que no son "Half"
+                            return (
+                                <div key={`${event.reactKey}-${idx}`} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 border border-gray-300 rounded p-2 mt-2">
+                                    <p>
+                                        Tipo:{' '}
+                                        {event.type === 'Goal'
+                                            ? 'Gol ⚽'
+                                            : event.type === 'Card'
+                                                ? event.card === 'Red'
+                                                    ? 'Tarjeta Roja 🟥'
+                                                    : 'Tarjeta Amarilla 🟨'
+                                                : event.type === 'Substitution'
+                                                    ? 'Cambio de jugador 🔄'
+                                                    : event.type}
+                                    </p>
+                                    <p>Minuto: {event.time}</p>
+                                    {event.type === 'Substitution' ? (
+                                        <div className='flex flex-col gap-2'>
+                                            <div className='flex items-center gap-2'>
+                                                🟢➡️: {event.swap?.[0]?.name}{' '}
+                                                <img
+                                                    src={`https://images.fotmob.com/image_resources/playerimages/${event.swap?.[0]?.id}.png`}
+                                                    width="60"
+                                                    alt="Player logo"
+                                                    style={{ display: 'inline', verticalAlign: 'middle' }}
+                                                />
+
+
+                                            </div>
+                                            <div className='flex items-center gap-2'>
+                                                🔴⬅️: {event.swap?.[1]?.name}{' '}
+                                                <img
+                                                    src={`https://images.fotmob.com/image_resources/playerimages/${event.swap?.[1]?.id}.png`}
+                                                    width="60"
+                                                    alt="Player logo"
+                                                    style={{ display: 'inline', verticalAlign: 'middle' }}
+                                                />
+                                            </div>
                                         </div>
-                                    ))
-                                )
-                            ) : (
-                                null
-                            )}
+                                    ) : (
+                                        <p>
 
-                            {matchDetail?.header.events?.awayTeamGoals &&
-                                Object.keys(matchDetail.header.events.awayTeamGoals).length > 0 ? (
-                                Object.entries(matchDetail.header.events.awayTeamGoals).map(([lastName, goals]) =>
-                                    goals.map((goal, idx) => (
-                                        <div key={`${lastName}-${idx}-${goal.time}`}>
-                                            <p>⚽ Gol de {goal.player.name} al minuto {goal.time}' - <b>{matchDetail?.header.teams[1].name}</b></p>
-                                        </div>
-                                    ))
-                                )
-                            ) : (
-                                null
-                            )}
+                                            {event.player?.name}{' '}
+                                            <img
+                                                src={`https://images.fotmob.com/image_resources/playerimages/${event.player?.id}.png`}
+                                                width="60"
+                                                alt="Player logo"
+                                                style={{ display: 'inline', verticalAlign: 'middle' }}
+                                            />
+                                        </p>
+                                    )}
+                                </div>
+                            );
+                        })}
 
-                            <li>
 
-                            </li>
-                        </ul>
 
+
+
+
+
+                    </div>
+                    <div className='p-4'>
+                        
                     </div>
                 </div>
             </div>
