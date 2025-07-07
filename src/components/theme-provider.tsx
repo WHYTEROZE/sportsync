@@ -7,5 +7,13 @@ export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return <div style={{ visibility: "hidden" }}> {/** opcional: para evitar layout shift */} </div>
+
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }
